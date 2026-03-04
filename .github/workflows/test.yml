@@ -16,7 +16,7 @@ jobs:
       - name: Get code
       # uses is a keyword that defines the action that will be used
       # checkout allows for the entire repo to be downloaded to the runner
-        uses: actions/checkout
+        uses: actions/checkout@v4
         # this is not needed b/c ubuntu latest has node already
       - name: Install Python
         uses: actions/setup-python@v6
@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get code
-        uses: actions/checkout
+        uses: actions/checkout@v4
       - name: Install Python
         uses: actions/setup-python@v6
         with:
