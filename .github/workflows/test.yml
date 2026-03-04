@@ -27,7 +27,7 @@ jobs:
         
       - name: Run tests
         run: pytest
-  deploy:
+  build:
     #  using needs tells the pipeline that test needs to run successfully first
     # needs: [job1, job2]
     needs: test
@@ -35,13 +35,9 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v4
-      - name: Install Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.13'
-      - name: install dependencies
-        run: pip install -r requirements.txt
-      - name: Build project
-        run: fastapi run src/main.py
-      - name: Deploy
-        run: echo "Deploying..."
+        
+      - name: Build Docker image
+        run: docker build -t my-fastapi-app:latest .
+
+      - name: Test Docker image
+        run: docker run my-fastapi-app:latest pytest
