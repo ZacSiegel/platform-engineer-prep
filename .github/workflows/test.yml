@@ -1,0 +1,47 @@
+# https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows
+name: Test Project
+on:
+# can also be written as [push, workflow_dispatch]
+  push:
+    branches:
+      - 'master'
+  workflow_dispatch: 
+# every job has its own runner/vm that is isolated form the other jobs/runners
+jobs:
+  test:
+  # need to define env/runner. It's the vm/server the code will run on
+    runs-on: ubuntu-latest
+    # steps execute a shell script or an action
+    steps: 
+      - name: Get code
+      # uses is a keyword that defines the action that will be used
+      # checkout allows for the entire repo to be downloaded to the runner
+        uses: actions/checkout
+        # this is not needed b/c ubuntu latest has node already
+      - name: Install Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+        
+      - name: Run tests
+        run: pytest
+  deploy:
+    #  using needs tells the pipeline that test needs to run successfully first
+    # needs: [job1, job2]
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout
+      - name: Install Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: install dependencies
+        run: pip install -r requirements.txt
+      - name: Build project
+        run: fastapi run src/main.py
+      - name: Deploy
+        run: echo "Deploying..."
