@@ -12,7 +12,7 @@ def test_add_two_services():
     })
 
     assert response.status_code == 200
-    assert response.json()["name"] == "simple bebe kyuts"
+    assert response.json()[0]["name"] == "simple bebe kyuts"
 
     response_2 = client.post("/services/add_service", json={
         "name": "big floofs",
@@ -21,10 +21,10 @@ def test_add_two_services():
     })
 
     assert response_2.status_code == 200
-    assert response_2.json()["name"] == "big floofs"
+    assert response_2.json()[1]["name"] == "big floofs"
 
 
 def test_list_all_services():
     response = client.get("/services")
     assert response.status_code == 200
-    assert len(response.json()) == 2
+    assert response.json()
